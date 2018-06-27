@@ -29,10 +29,7 @@ attempt act = do
         Left ex -> (putStrLn $ show (ex :: SomeException)) >> return 255
 
 fixSlashes :: String -> String
-fixSlashes str = map tr str
-    where
-        tr '\\' = '/'
-        tr c = c
+fixSlashes str = map (\c -> if c == '\\' then '/' else c) str
 
 myNicePrompt :: Int -> IO ()
 myNicePrompt lastret = do
