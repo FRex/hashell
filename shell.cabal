@@ -8,3 +8,4 @@ executable shell
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5, haskeline, process, directory, ansi-terminal
+  other-modules:       Run, Parse

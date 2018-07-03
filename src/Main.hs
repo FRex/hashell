@@ -8,6 +8,9 @@ import System.Console.ANSI
 import System.IO
 import Control.Monad.IO.Class
 import Control.Monad
+import qualified Run
+import qualified Parse
+
 
 tokenize :: String -> [String]
 tokenize line = words line
