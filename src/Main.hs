@@ -18,9 +18,6 @@ attempt act = do
         Right x -> return x
         Left ex -> (putStrLn $ show (ex :: SomeException)) >> return 255
 
-fixSlashes :: String -> String
-fixSlashes str = map (\c -> if c == '\\' then '/' else c) str
-
 myNicePrompt :: Int -> IO ()
 myNicePrompt lastret = do
     curdir <- liftM fixSlashes getCurrentDirectory
@@ -29,23 +26,24 @@ myNicePrompt lastret = do
     putStr $ show lastret
     putStr ") "
     hFlush stdout
+    where fixSlashes str = map (\c -> if c == '\\' then '/' else c) str
 
 reloop :: Int -> InputT IO ()
 reloop lastret = do
     liftIO $ myNicePrompt lastret
     curline <- getInputLine ">>= "
     case curline of
-        Nothing -> liftIO $ putStrLn "\nEOF - bye!"
+        Nothing -> puts' "\nEOF - bye!"
         Just line -> do
             let tokens = words line
             case tokens of
                 [] -> reloop lastret
-                "exit":_ -> liftIO $ putStrLn "Exitting - bye!"
+                "exit":_ -> puts' "Exitting - bye!"
                 "cd":dirto:[] -> attempt' (setCurrentDirectory dirto >> return 0) >>= reloop
-                "cd":_ -> (liftIO $ putStrLn "'cd' requires exactly 1 argument") >> reloop 255
+                "cd":_ -> (puts' "'cd' requires exactly 1 argument") >> reloop 255
                 _ -> attempt' (Run.runProcesses $ Parse.parseLineIntoProcesses line) >>= reloop
-
                 where attempt' = liftIO . attempt
+        where puts' = liftIO . putStrLn
 
 main :: IO ()
 main = runInputT defaultSettings (reloop 0)

@@ -8,10 +8,6 @@ import GHC.IO.Handle (Handle)
 makePipes :: Int -> IO([(Handle, Handle)])
 makePipes n = mapM (\_ -> createPipe) [1..n]
 
---mix :: [CreateProcess] -> [(Handle, Handle)] -> [CreateProcess]
---mix p [] = p
---mix p:ps
-
 adjustPipes :: [(Handle, Handle)] -> [(StdStream, StdStream)]
 adjustPipes pipes =
     let flat = flatten pipes
