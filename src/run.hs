@@ -19,7 +19,7 @@ adjustPipes pipes =
     in pairUp handles
     where
         flatten [] = []
-        flatten (x:xs) = (fst x):(snd x):(flatten xs)
+        flatten (x:xs) = (snd x):(fst x):(flatten xs)
         pairUp [] = []
         pairUp (a:b:rst) = (a, b):(pairUp rst)
 
@@ -35,9 +35,9 @@ runProcesses (ps:[]) = do
     case ecode of
         ExitSuccess -> return 0
         ExitFailure ret -> return ret
-runProcesses procs = do
-    pipes <- liftM adjustPipes $ makePipes $ (length procs) - 1
-    let procs = replaceInOut procs pipes
+runProcesses ps = do
+    pipes <- liftM adjustPipes $ makePipes $ (length ps) - 1
+    let procs = replaceInOut ps pipes
     handles <- liftM (map (\(_, _, _, h) -> h)) $ mapM createProcess procs
     ecode <- liftM last $ mapM waitForProcess handles
     case ecode of
