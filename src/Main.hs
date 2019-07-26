@@ -3,7 +3,6 @@ import System.Console.Haskeline
 import System.Process
 import System.Directory
 import Control.Exception
-import System.Console.ANSI
 import System.IO
 import Control.Monad.IO.Class
 import Control.Monad
